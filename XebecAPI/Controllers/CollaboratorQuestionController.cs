@@ -19,29 +19,29 @@ namespace XebecAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class DepartmentController : ControllerBase
+    public class CollaboratorQuestionController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper mapper;
 
-        public DepartmentController(IUnitOfWork unitOfWork, IMapper mapper)
+        public CollaboratorQuestionController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
 
-        // GET: api/<DepartmentController>
+        // GET: api/<CollaboratorQuestionController>
         [HttpGet]
         [Authorize(Roles = "HRAdmin, Super Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetDepartments()
+        public async Task<IActionResult> GetCollaboratorQuestions()
         {
             try
             {
-                var Departments = await _unitOfWork.Departments.GetAll();
+                var CollaboratorQuestions = await _unitOfWork.CollaboratorQuestions.GetAll();
              
-                return Ok(Departments);
+                return Ok(CollaboratorQuestions);
 
             }
             catch (Exception e)
@@ -50,17 +50,17 @@ namespace XebecAPI.Controllers
             }
         }
 
-        // GET api/<DepartmentController>/5
+        // GET api/<CollaboratorQuestionController>/5
         [HttpGet("single/{id}")]
         [Authorize(Roles = "HRAdmin, Super Admin")]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetSingleDepartmentById(int id)
+        public async Task<IActionResult> GetSingleCollaboratorQuestionById(int id)
         {
             try
             {
-                var Department = await _unitOfWork.Departments.GetT(q => q.Id == id);
-                return Ok(Department);
+                var CollaboratorQuestion = await _unitOfWork.CollaboratorQuestions.GetT(q => q.Id == id);
+                return Ok(CollaboratorQuestion);
             }
             catch (Exception e)
             {
@@ -68,12 +68,12 @@ namespace XebecAPI.Controllers
             }
         }
 
-        // POST api/<DepartmentController>
+        // POST api/<CollaboratorQuestionController>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateDepartment([FromBody] Department Department)
+        public async Task<IActionResult> CreateCollaboratorQuestion([FromBody] CollaboratorQuestion CollaboratorQuestion)
         {
 
             if (!ModelState.IsValid)
@@ -86,9 +86,9 @@ namespace XebecAPI.Controllers
             try
             {
 
-                await _unitOfWork.Departments.Insert(Department);
+                await _unitOfWork.CollaboratorQuestions.Insert(CollaboratorQuestion);
                 await _unitOfWork.Save();
-                return CreatedAtAction("GetDepartment", new { id = Department.Id }, Department);
+                return CreatedAtAction("GetCollaboratorQuestion", new { id = CollaboratorQuestion.Id }, CollaboratorQuestion);
 
             }
             catch (Exception e)
@@ -102,9 +102,9 @@ namespace XebecAPI.Controllers
         }
 
 
-        // PUT api/<DepartmentController>/5
+        // PUT api/<CollaboratorQuestionController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateDepartment(int id, [FromBody] DepartmentDTO Department)
+        public async Task<IActionResult> UpdateCollaboratorQuestion(int id, [FromBody] CollaboratorQuestionDTO CollaboratorQuestion)
         {
             if (!ModelState.IsValid)
             {
@@ -113,14 +113,14 @@ namespace XebecAPI.Controllers
 
             try
             {
-                var originalDepartment = await _unitOfWork.Departments.GetT(q => q.Id == id);
+                var originalCollaboratorQuestion = await _unitOfWork.CollaboratorQuestions.GetT(q => q.Id == id);
 
-                if (originalDepartment == null)
+                if (originalCollaboratorQuestion == null)
                 {
                     return BadRequest("Submitted data is invalid");
                 }
-                mapper.Map(Department, originalDepartment);
-                _unitOfWork.Departments.Update(originalDepartment);
+                mapper.Map(CollaboratorQuestion, originalCollaboratorQuestion);
+                _unitOfWork.CollaboratorQuestions.Update(originalCollaboratorQuestion);
                 await _unitOfWork.Save();
 
                 return NoContent();
@@ -134,12 +134,12 @@ namespace XebecAPI.Controllers
         }
 
 
-        // DELETE api/<DepartmentController>/5
+        // DELETE api/<CollaboratorQuestionController>/5
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> DeleteDepartment(int id)
+        public async Task<IActionResult> DeleteCollaboratorQuestion(int id)
         {
             if (id < 1)
             {
@@ -148,14 +148,14 @@ namespace XebecAPI.Controllers
 
             try
             {
-                var Department = await _unitOfWork.Departments.GetT(q => q.Id == id);
+                var CollaboratorQuestion = await _unitOfWork.CollaboratorQuestions.GetT(q => q.Id == id);
 
-                if (Department == null)
+                if (CollaboratorQuestion == null)
                 {
                     return BadRequest("Submitted data is invalid");
                 }
 
-                await _unitOfWork.Departments.Delete(id);
+                await _unitOfWork.CollaboratorQuestions.Delete(id);
                 await _unitOfWork.Save();
 
                 return NoContent();
